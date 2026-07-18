@@ -121,9 +121,12 @@
             
             <!-- Header Card -->
             <div class="bg-white dark:bg-[#1a1a20] rounded-3xl shadow-sm border border-yellow-100/40 dark:border-gray-800 overflow-hidden transition-colors duration-300">
-                <!-- Cover Image (Sky Blue & Yellow design background) -->
+                <!-- Cover Image (전달받으신 SOOP 맞춤형 배너 연동) -->
                 <div class="h-32 sm:h-48 w-full relative overflow-hidden bg-gradient-to-r from-sub-light via-yellow-50 to-brand-light dark:from-sky-950 dark:to-yellow-950">
-                    <div class="absolute inset-0 opacity-20 dark:opacity-40" style="background-image: radial-gradient(#facc15 1.5px, transparent 1.5px), radial-gradient(#38bdf8 1.5px, transparent 1.5px); background-size: 24px 24px; background-position: 0 0, 12px 12px;"></div>
+                    <img src="https://cdn.discordapp.com/attachments/1527971748916498482/1528143061060813013/SOOP_2.png?ex=6a5d39a1&is=6a5be821&hm=15909089617dae920b49110b5dcdd75049d794712f85a0b9801832b98a78ffc0&" 
+                         onerror="this.src='https://placehold.co/1200x400/fef08a/0ea5e9?text=Mochi'" 
+                         class="w-full h-full object-cover absolute inset-0" alt="모치 배너">
+                    <div class="absolute inset-0 bg-black/5 dark:bg-black/20"></div>
                 </div>
                 
                 <div class="px-6 sm:px-8 pb-6 flex flex-col sm:flex-row relative">
@@ -1198,6 +1201,7 @@
         }
         function closeNoticeEditModal() { const modal = document.getElementById('notice-edit-modal'); modal.classList.add('opacity-0', 'pointer-events-none'); modal.querySelector('div').classList.remove('scale-100'); modal.querySelector('div').classList.add('scale-95'); }
 
+        // 공지 목록 렌더링 (에디터 내)
         function renderNoticeEditList() {
             const list = document.getElementById('notice-edit-list'); list.innerHTML = '';
             if (globalNoticeData.length === 0) { list.innerHTML = '<div class="text-center text-gray-500 py-4">등록된 공지가 비어있습니다.</div>'; return; }
