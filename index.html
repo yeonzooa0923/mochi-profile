@@ -72,10 +72,35 @@
     <header class="bg-white/80 dark:bg-[#1a1a20]/80 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-colors duration-300 border-b border-yellow-100/50 dark:border-gray-800">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo/Name -->
+                <!-- Logo/Name (쿠키 판다 SVG 반영) -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="#" class="text-2xl font-black text-brand-dark flex items-center gap-2 jelly-hover">
-                        <i class="fa-solid fa-cookie-bite text-brand text-2xl drop-shadow-sm"></i>
+                    <a href="#" class="text-2xl font-black text-brand-dark flex items-center gap-1.5 jelly-hover">
+                        <!-- 귀여운 아기 판다 커스텀 SVG -->
+                        <svg class="w-10 h-10 drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Ears -->
+                            <circle cx="18" cy="18" r="8" fill="#2D3748" />
+                            <circle cx="46" cy="18" r="8" fill="#2D3748" />
+                            <!-- Head -->
+                            <circle cx="32" cy="35" r="20" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" />
+                            <!-- Eye Patches -->
+                            <ellipse cx="24" cy="34" rx="5.5" ry="7.5" transform="rotate(-15 24 34)" fill="#2D3748" />
+                            <ellipse cx="40" cy="34" rx="5.5" ry="7.5" transform="rotate(15 40 34)" fill="#2D3748" />
+                            <!-- Eyes (Pupils) -->
+                            <circle cx="24.5" cy="33" r="2" fill="#FFFFFF" />
+                            <circle cx="25.5" cy="32" r="0.7" fill="#FFFFFF" />
+                            <circle cx="39.5" cy="33" r="2" fill="#FFFFFF" />
+                            <circle cx="38.5" cy="32" r="0.7" fill="#FFFFFF" />
+                            <!-- Snout/Nose -->
+                            <ellipse cx="32" cy="39" rx="3" ry="2" fill="#2D3748" />
+                            <!-- Blush -->
+                            <circle cx="16" cy="39" r="2.5" fill="#FCA5A5" fill-opacity="0.6" />
+                            <circle cx="48" cy="39" r="2.5" fill="#FCA5A5" fill-opacity="0.6" />
+                            <!-- Mouth -->
+                            <path d="M 30 41 Q 32 42.5 34 41" stroke="#2D3748" stroke-width="1.2" stroke-linecap="round" fill="none" />
+                            <!-- Paws (Cute hands resting near cheeks) -->
+                            <circle cx="24" cy="48" r="3.5" fill="#2D3748" />
+                            <circle cx="40" cy="48" r="3.5" fill="#2D3748" />
+                        </svg>
                         <span class="dark:text-yellow-400 font-cute text-4xl tracking-wide">모치</span>
                     </a>
                 </div>
