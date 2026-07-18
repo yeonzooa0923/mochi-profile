@@ -564,7 +564,8 @@
 
     <!-- Footer -->
     <footer class="bg-sky-900 dark:bg-black text-white py-8 text-center mt-auto transition-colors duration-300">
-        <p class="text-sm text-sky-100 dark:text-gray-400 font-cute text-3xl tracking-wide">© 2026 모치모치. All Mochi’s Rights Reserved.</p>
+        <p class="text-sm text-sky-100 dark:text-gray-400 font-cute text-3xl tracking-wide">© 2026 모치. All Mochi’s Rights Reserved.</p>
+        <p class="text-sm text-sky-200/80 dark:text-gray-400 mt-1 font-bold">made by. 연주아🍀</p>
         <p class="text-sm text-sky-200/60 dark:text-gray-500 mt-1 font-bold">문의 연락처: mochi_sweet@gmail.com</p>
     </footer>
 
@@ -663,7 +664,7 @@
         }
 
         // ==========================================
-        // 🔒 Canvas 규칙 인증 및 DB 동기화 설계 (Rule 1 & 3) 🔒
+        // 🔒 Canvas 규칙 인증 및 DB 동기화 설계 🔒
         // ==========================================
         const getMochiDocRef = () => doc(db, 'artifacts', appId, 'public', 'data', 'siteData', 'mochiData');
 
@@ -1354,7 +1355,7 @@
                 list.innerHTML += `
                     <div class="flex items-center gap-3 bg-[#fefcf3] dark:bg-[#1e1e24] border border-yellow-100 dark:border-gray-800 p-2 rounded-xl font-bold">
                         <div class="w-6 text-center font-title text-sm text-brand-dark dark:text-brand flex-shrink-0">${schedule.day}</div>
-                        <input type="text" id="schedule-input-${index}" value="${schedule.content}" class="flex-grow bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-850 text-gray-900 dark:text-gray-200 text-sm rounded-lg focus:ring-1 focus:ring-brand p-1.5 outline-none font-sans font-medium">
+                        <input type="text" id="schedule-input-${index}" value="${schedule.content}" class="flex-grow bg-white dark:bg-gray-950 border border-gray-250 dark:border-gray-850 text-gray-900 dark:text-gray-200 text-sm rounded-lg focus:ring-1 focus:ring-brand p-1.5 outline-none font-sans font-medium">
                         <label class="flex items-center gap-1 text-xs text-gray-500 cursor-pointer flex-shrink-0 font-title">
                             <input type="checkbox" id="schedule-rest-${index}" ${schedule.isRest ? 'checked' : ''} class="w-4 h-4 text-brand rounded focus:ring-brand">휴방
                         </label>
@@ -1426,14 +1427,14 @@
             ddays.forEach((dday, index) => {
                 list.innerHTML += `
                     <div class="flex items-center gap-2 bg-[#fefcf3] dark:bg-[#1a1a20] p-2 rounded-xl border border-yellow-100 dark:border-gray-800 font-bold">
-                        <input type="text" id="edit-dday-title-${index}" value="${dday.title}" class="w-1/3 bg-white dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-lg p-1.5 text-sm text-gray-900 dark:text-gray-200 outline-none font-sans font-medium" placeholder="타이틀">
-                        <select id="edit-dday-type-${index}" class="w-1/4 bg-white dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-lg p-1.5 text-sm text-gray-900 dark:text-gray-200 outline-none font-title">
+                        <input type="text" id="edit-dday-title-${index}" value="${dday.title}" class="w-1/3 bg-white dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-lg p-1.5 text-xs text-gray-900 dark:text-gray-200 outline-none" placeholder="타이틀">
+                        <select id="edit-dday-type-${index}" class="w-1/4 bg-white dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-lg p-1.5 text-xs text-gray-900 dark:text-gray-200 outline-none">
                             <option value="birthday" ${dday.type === 'birthday' ? 'selected' : ''}>생일</option>
                             <option value="anniversary" ${dday.type === 'anniversary' ? 'selected' : ''}>기념일</option>
                             <option value="dday" ${dday.type === 'dday' ? 'selected' : ''}>디데이</option>
                         </select>
-                        <input type="text" id="edit-dday-date-${index}" value="${dday.date}" class="w-1/4 bg-white dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-lg p-1.5 text-sm text-gray-900 dark:text-gray-200 outline-none font-sans font-medium" placeholder="예: 05-19">
-                        <button type="button" onclick="deleteEditDdayRow(${index})" class="text-gray-400 hover:text-red-500 p-1 text-base"><i class="fa-solid fa-trash-can"></i></button>
+                        <input type="text" id="edit-dday-date-${index}" value="${dday.date}" class="w-1/4 bg-white dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-lg p-1.5 text-xs text-gray-900 dark:text-gray-200 outline-none" placeholder="예: 05-19">
+                        <button type="button" onclick="deleteEditDdayRow(${index})" class="text-gray-400 hover:text-red-500 p-1 text-sm"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
             });
@@ -1530,11 +1531,3 @@
     </script>
 </body>
 </html>
-```
-eof
-
-### 수정 완료 리포트:
-* **모달 폼 정상화**: 프로필 편집 창에 유실되어 보이지 않던 **"대표 배너 설정"** 텍스트 칸과 **"소셜 미디어 링크 수정 (SOOP, YouTube, 팬심, 팬심M)"** 영역을 온전히 부활시켰습니다.
-* **Canvas 보안 데이터베이스 마이그레이션**: 보안 스토리지 규칙 1(Strict Paths)과 3(Auth Before Queries)을 100% 준수하도록 파이어베이스 연결 로직을 전격 수정하였습니다. 이제 수정한 배너 주소나 소셜 미디어 주소가 DB에 차단 없이 안전하게 전송 및 영구 보존됩니다.
-
-오른쪽 화면에서 **`Preview`**를 클릭하신 다음, 하단의 관리자 모드(`100425`)로 진입하여 배너 이미지와 다양한 외부 링크를 편리하게 커스텀해 보세요!
