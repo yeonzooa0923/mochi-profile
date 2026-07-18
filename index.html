@@ -121,7 +121,7 @@
             
             <!-- Header Card -->
             <div class="bg-white dark:bg-[#1a1a20] rounded-3xl shadow-sm border border-yellow-100/40 dark:border-gray-800 overflow-hidden transition-colors duration-300">
-                <!-- Cover Image (전달받으신 SOOP 맞춤형 배너 연동) -->
+                <!-- Cover Image (SOOP_2.png 연동) -->
                 <div class="h-32 sm:h-48 w-full relative overflow-hidden bg-gradient-to-r from-sub-light via-yellow-50 to-brand-light dark:from-sky-950 dark:to-yellow-950">
                     <img src="https://cdn.discordapp.com/attachments/1527971748916498482/1528143061060813013/SOOP_2.png?ex=6a5d39a1&is=6a5be821&hm=15909089617dae920b49110b5dcdd75049d794712f85a0b9801832b98a78ffc0&" 
                          onerror="this.src='https://placehold.co/1200x400/fef08a/0ea5e9?text=Mochi'" 
@@ -161,6 +161,12 @@
                         <div class="flex justify-center sm:justify-start gap-3">
                             <a href="https://www.sooplive.com/station/mong0519" target="_blank" class="w-10 h-10 rounded-full bg-sub text-white flex items-center justify-center hover:bg-sub-dark transition-transform hover:scale-110 shadow-sm" title="SOOP 방송국">
                                 <i class="fa-solid fa-tv"></i>
+                            </a>
+                            <a href="https://youtube.com/@mochii0401?si=MGmqtTIqKm1eK8w7" target="_blank" class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-transform hover:scale-110 shadow-sm" title="YouTube">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                            <a href="https://fancimm.com/profile/199999" target="_blank" class="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center hover:bg-pink-600 transition-transform hover:scale-110 shadow-sm" title="팬심M">
+                                <i class="fa-solid fa-gift"></i>
                             </a>
                         </div>
                     </div>
@@ -415,10 +421,10 @@
                             <option value="공지">공지</option>
                             <option value="일상">일상</option>
                         </select>
-                        <input type="text" id="new-notice-content" class="flex-grow bg-white dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-xs rounded-xl focus:ring-1 focus:ring-sub p-2.5 outline-none" placeholder="공지 사항을 적어주세요...">
+                        <input type="text" id="new-notice-content" class="flex-grow bg-white dark:bg-gray-950 border border-yellow-100/40 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-xs rounded-xl focus:ring-1 focus:ring-sub p-2.5 outline-none" placeholder="공지 사항을 적어주세요...">
                     </div>
                     <div class="flex gap-2">
-                        <input type="text" id="new-notice-link" class="flex-grow bg-white dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-xs rounded-xl focus:ring-1 focus:ring-sub p-2.5 outline-none" placeholder="외부 링크 연동 (선택, https://...)">
+                        <input type="text" id="new-notice-link" class="flex-grow bg-white dark:bg-gray-950 border border-yellow-100/40 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-xs rounded-xl focus:ring-1 focus:ring-sub p-2.5 outline-none" placeholder="외부 링크 연동 (선택, https://...)">
                         <button onclick="addNewNotice()" class="bg-sub text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-sub-dark transition-colors whitespace-nowrap shadow-sm">업로드</button>
                     </div>
                 </div>
@@ -620,11 +626,10 @@
             } catch (e) {}
         }
 
-        // 파이어베이스에서 사이트 데이터 읽어오기 (안전성 대폭 강화)
+        // 파이어베이스에서 사이트 데이터 읽어오기
         async function fetchSiteData() {
             const loadingInd = document.getElementById('loading-indicator');
             
-            // 네트워크 연결 상태가 오프라인이거나, 로컬 가상 환경에서 차단된 경우 조기 회피
             if (!navigator.onLine) {
                 console.warn("오프라인 상태입니다. 로컬 백업 데이터를 로드합니다.");
                 fallbackToLocal();
@@ -640,7 +645,6 @@
                 try {
                     const docRef = db.collection('mochiProfile').doc('siteData');
                     
-                    // 3초 타임아웃 레이스를 통해 Firestore 연결 대기 오류 완벽 대응
                     const getPromise = docRef.get();
                     const timeoutPromise = new Promise((_, reject) => 
                         setTimeout(() => reject(new Error("Firestore 연결 시간 초과 (3초)")), 3000)
@@ -659,7 +663,6 @@
                             globalProfileData.ddays = JSON.parse(JSON.stringify(defaultProfileData.ddays));
                         }
                     } else {
-                        // 기본 데이터가 없는 경우 안전하게 최초 세팅
                         await docRef.set({
                             upbo: defaultUpboData, 
                             notice: defaultNoticeData, 
@@ -672,8 +675,7 @@
                         globalProfileData = defaultProfileData;
                     }
                 } catch (error) {
-                    // 오류 스택을 콘솔에 띄워 브라우저 흐름을 방해하지 않고 경고로 전환 및 로컬 백업 로드
-                    console.warn("Firebase 실시간 연결에 지연이 발생하여 로컬 캐시를 로드했습니다. (파이어베이스 콘솔에서 'Firestore Database'를 생성했는지 확인해보세요!)", error.message);
+                    console.warn("Firebase 실시간 연결에 지연이 발생하여 로컬 캐시를 로드했습니다.", error.message);
                     fallbackToLocal();
                 }
                 if (loadingInd) loadingInd.classList.add('hidden');
@@ -1006,7 +1008,7 @@
                         <div class="flex items-center gap-2.5">
                             <img src="${avatarUrl}" onerror="this.src='https://placehold.co/100x100/fef08a/0ea5e9?text=${user.nickname.substring(0,2)}'" class="w-10 h-10 rounded-full border border-yellow-100 dark:border-gray-700 object-cover">
                             <div>
-                                <div class="text-gray-900 dark:text-white font-bold text-xs">${user.nickname}</div>
+                                <div class="text-gray-900 dark:text-white font-bold text-sm">${user.nickname}</div>
                                 <div class="text-gray-400 text-[10px]">(${user.id || '아이디 미지정'})</div>
                             </div>
                         </div>
@@ -1308,6 +1310,7 @@
             });
         }
 
+        // 프로필 닫기
         function closeProfileEditModal() { 
             const modal = document.getElementById('profile-edit-modal'); 
             modal.classList.add('opacity-0', 'pointer-events-none'); 
@@ -1315,6 +1318,7 @@
             modal.querySelector('div').classList.add('scale-95'); 
         }
 
+        // 디데이 렌더링
         function renderEditDdays() {
             const list = document.getElementById('edit-dday-list');
             if (!list) return;
