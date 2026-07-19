@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모치 프로필</title>
     
-    <!-- 브라우저 탭 아이콘 (파비콘) 연동 (모치님 실제 SOOP 프로필 이미지) -->
-    <link class="rounded-full" rel="icon" href="https://stimg.afreecatv.com/LOGO/mo/mong0519/mong0519.jpg">
+    <!-- 브라우저 탭 아이콘 (파비콘) 연동 (모치님 실제 SOOP 프로필 이미지 - JS로 가변 처리 가능하도록 ID 적용) -->
+    <link id="favicon-link" class="rounded-full" rel="icon" href="https://stimg.afreecatv.com/LOGO/mo/mong0519/mong0519.jpg">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -42,6 +42,7 @@
             }
         }
     </script>
+    
     <style>
         html { scroll-behavior: smooth; }
         /* 스크롤바 커스텀 */
@@ -62,12 +63,47 @@
         .jelly-hover:hover {
             animation: jelly 0.6s ease-in-out;
         }
+
+        /* 말랑말랑 바운스 효과 클래스 (이식) */
+        .squishy {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .squishy:hover {
+            transform: translateY(-4px) scale(1.025);
+        }
+        .squishy:active {
+            transform: translateY(1px) scale(0.975);
+        }
+
+        /* 둥둥 떠 있는 귀여운 모션 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(1deg); }
+        }
+        .floating-soft {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* 파티클 낙하 애니메이션 (이식) */
+        .leaf-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
     </style>
 </head>
-<body class="bg-[#fffdf4] dark:bg-[#121215] text-gray-800 dark:text-gray-100 font-sans text-lg antialiased min-h-screen flex flex-col transition-colors duration-300">
+<body class="bg-[#fffdf4] dark:bg-[#121215] text-gray-800 dark:text-gray-100 font-sans text-lg antialiased min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
+
+    <!-- Falling particles background (이식) -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-75 dark:opacity-30" id="leaf-bg-effects"></div>
 
     <!-- Header / Navigation -->
-    <header class="bg-white/80 dark:bg-[#1a1a20]/80 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-colors duration-300 border-b border-yellow-100/50 dark:border-gray-800">
+    <header class="bg-white/80 dark:bg-[#1a1a20]/80 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-colors duration-300 border-b border-yellow-100/50 dark:border-gray-800 relative z-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo/Name -->
@@ -94,13 +130,13 @@
                     <a href="#karma" class="text-gray-600 dark:text-gray-300 hover:text-sub-dark dark:hover:text-sub px-3 py-2 rounded-xl transition-colors">업보</a>
                     
                     <!-- Dark Mode Toggle Button -->
-                    <button id="theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-yellow-50 dark:hover:bg-gray-800 p-2.5 rounded-xl transition-colors">
+                    <button id="theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-yellow-50 dark:hover:bg-gray-800 p-2.5 rounded-xl transition-colors squishy">
                         <i class="fa-solid fa-moon text-lg w-5 h-5 flex items-center justify-center"></i>
                     </button>
                 </nav>
                 <!-- Mobile Menu & Theme Button -->
                 <div class="md:hidden flex items-center gap-1">
-                    <button id="mobile-theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-yellow-50 dark:hover:bg-gray-800 p-2.5 rounded-xl transition-colors">
+                    <button id="mobile-theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-yellow-50 dark:hover:bg-gray-800 p-2.5 rounded-xl transition-colors squishy">
                         <i class="fa-solid fa-moon text-lg w-5 h-5 flex items-center justify-center"></i>
                     </button>
                     <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300 focus:outline-none p-2.5 rounded-xl hover:bg-yellow-50 dark:hover:bg-gray-800">
@@ -121,7 +157,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 relative z-10">
 
         <!-- 1. Profile Section -->
         <section id="profile" class="scroll-mt-20 flex flex-col gap-6">
@@ -137,9 +173,9 @@
                 </div>
                 
                 <div class="px-6 sm:px-8 pb-6 flex flex-col sm:flex-row relative">
-                    <!-- Avatar -->
+                    <!-- Avatar (ID 추가 연동) -->
                     <div class="-mt-16 sm:-mt-24 mb-4 sm:mb-0 sm:mr-6 flex-shrink-0 flex justify-center sm:block relative z-10">
-                        <img class="h-32 w-32 sm:h-40 sm:w-40 rounded-full border-4 border-white dark:border-[#1a1a20] shadow-md object-cover bg-brand-light dark:bg-gray-800 jelly-hover" 
+                        <img id="avatar-display" class="h-32 w-32 sm:h-40 sm:w-40 rounded-full border-4 border-white dark:border-[#1a1a20] shadow-md object-cover bg-brand-light dark:bg-gray-800 jelly-hover" 
                              src="https://stimg.afreecatv.com/LOGO/mo/mong0519/mong0519.jpg" 
                              onerror="this.src='https://placehold.co/400x400/fef08a/0ea5e9?text=Mochi'" 
                              alt="모치 아바타">
@@ -166,18 +202,18 @@
 
                         <!-- Social Links -->
                         <div class="flex justify-center sm:justify-start gap-3">
-                            <a id="profile-soop-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-sub text-white flex items-center justify-center hover:bg-sub-dark transition-transform hover:scale-110 shadow-sm" title="SOOP 방송국">
+                            <a id="profile-soop-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-sub text-white flex items-center justify-center hover:bg-sub-dark transition-transform hover:scale-110 shadow-sm squishy" title="SOOP 방송국">
                                 <i class="fa-solid fa-tv text-base"></i>
                             </a>
-                            <a id="profile-youtube-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-transform hover:scale-110 shadow-sm" title="YouTube">
+                            <a id="profile-youtube-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-transform hover:scale-110 shadow-sm squishy" title="YouTube">
                                 <i class="fa-brands fa-youtube text-base"></i>
                             </a>
                             <!-- Fancim (선물 아이콘 / 피치로즈 테마) -->
-                            <a id="profile-fancim-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-rose-400 text-white flex items-center justify-center hover:bg-rose-500 transition-transform hover:scale-110 shadow-sm" title="팬심">
+                            <a id="profile-fancim-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-rose-400 text-white flex items-center justify-center hover:bg-rose-500 transition-transform hover:scale-110 shadow-sm squishy" title="팬심">
                                 <i class="fa-solid fa-gift text-base"></i>
                             </a>
                             <!-- FancimM (하트 아이콘 / 코튼핑크 테마) -->
-                            <a id="profile-fancimm-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center hover:bg-pink-600 transition-transform hover:scale-110 shadow-sm" title="팬심M">
+                            <a id="profile-fancimm-link" href="#" target="_blank" class="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center hover:bg-pink-600 transition-transform hover:scale-110 shadow-sm squishy" title="팬심M">
                                 <i class="fa-solid fa-heart text-base"></i>
                             </a>
                         </div>
@@ -235,12 +271,12 @@
                     <div class="border-b border-dashed border-yellow-100/50 dark:border-gray-800"></div>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
                         <span class="text-brand-dark dark:text-brand font-title text-base w-24 flex-shrink-0">주요 소통</span>
-                        <span id="profile-broadcast-content" class="text-gray-700 dark:text-gray-300 text-base"><!-- JS --></span>
+                        <span id="profile-broadcast-content" class="text-gray-750 dark:text-gray-300 text-base"><!-- JS --></span>
                     </div>
                     <div class="border-b border-dashed border-yellow-100/50 dark:border-gray-800"></div>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
                         <span class="text-brand-dark dark:text-brand font-title text-base w-24 flex-shrink-0">선호 장르</span>
-                        <span id="profile-broadcast-game" class="text-gray-700 dark:text-gray-300 text-base"><!-- JS --></span>
+                        <span id="profile-broadcast-game" class="text-gray-750 dark:text-gray-300 text-base"><!-- JS --></span>
                     </div>
                 </div>
             </div>
@@ -339,7 +375,7 @@
                         <input type="text" id="upbo-search" class="w-full bg-yellow-50/20 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-base rounded-xl focus:ring-1 focus:ring-sub focus:border-sub block pl-11 p-3.5 transition-colors placeholder-gray-400 dark:placeholder-gray-600 outline-none font-bold" placeholder="모찍이 닉네임 검색...">
                     </div>
                     <!-- Admin: Add User Button -->
-                    <button id="admin-add-user-btn" onclick="openAddUserModal()" class="hidden items-center justify-center bg-sub hover:bg-sub-dark text-white font-title py-3.5 px-5 rounded-xl transition-colors whitespace-nowrap shadow-sm text-base">
+                    <button id="admin-add-user-btn" onclick="openAddUserModal()" class="hidden items-center justify-center bg-sub hover:bg-sub-dark text-white font-title py-3.5 px-5 rounded-xl transition-colors whitespace-nowrap shadow-sm text-base squishy">
                         <i class="fa-solid fa-user-plus mr-2 text-sm"></i>모찍이 추가
                     </button>
                 </div>
@@ -562,6 +598,11 @@
 
     </main>
 
+    <!-- Visual Toast Notification (이식) -->
+    <div id="toast-message" class="fixed bottom-6 right-6 z-[150] bg-yellow-400 text-[#451A03] font-title text-base py-3 px-5 rounded-xl shadow-lg transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 border border-yellow-500">
+        <span id="toast-text">변경 사항이 반영되었습니다! 🍡</span>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-sky-900 dark:bg-black text-white py-8 text-center mt-auto transition-colors duration-300">
         <p class="text-sm text-sky-100 dark:text-gray-400 font-cute text-3xl tracking-wide">© 2026 모치. All Mochi’s Rights Reserved.</p>
@@ -746,8 +787,64 @@
             }
         }
 
+        // 토스트 출력 유틸
+        function showToast(message) {
+            const toast = document.getElementById('toast-message');
+            const toastText = document.getElementById('toast-text');
+            if (!toast || !toastText) return;
+            
+            toastText.innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // 배경 파티클 생성기 (모치 맞춤 테마 적용)
+        function generateBgLeaves() {
+            const container = document.getElementById('leaf-bg-effects');
+            if (!container) return;
+            const leafIcons = ['⭐', '🐼', '💛'];
+            
+            setInterval(() => {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf-particle text-sm select-none';
+                leaf.style.left = Math.random() * 100 + 'vw';
+                leaf.style.top = '-20px';
+                leaf.style.fontSize = Math.random() * (26 - 14) + 14 + 'px'; 
+                leaf.style.animationDuration = Math.random() * (10 - 5) + 5 + 's'; 
+                leaf.style.opacity = Math.random() * 0.4 + 0.3; 
+                leaf.innerText = leafIcons[Math.floor(Math.random() * leafIcons.length)];
+                
+                container.appendChild(leaf);
+                setTimeout(() => { leaf.remove(); }, 10000);
+            }, 600);
+        }
+
+        // SOOP 아이디 파싱 함수
+        function getSoopId(url) {
+            if (!url) return 'mong0519';
+            try {
+                const cleaned = url.trim();
+                const parts = cleaned.split('/');
+                let lastPart = parts[parts.length - 1];
+                if (!lastPart && parts.length > 1) {
+                    lastPart = parts[parts.length - 2];
+                }
+                return lastPart || 'mong0519';
+            } catch (e) {
+                return 'mong0519';
+            }
+        }
+
         // 초기 스타트 바인딩 및 이벤트 핸들러 등록
         document.addEventListener('DOMContentLoaded', async () => {
+            // 파티클 백그라운드 활성화
+            generateBgLeaves();
+
             const themeToggleBtns = [document.getElementById('theme-toggle'), document.getElementById('mobile-theme-toggle')];
             const html = document.documentElement;
             let savedTheme = 'light';
@@ -892,7 +989,7 @@
             
             const tagsContainer = document.getElementById('profile-tags-container');
             if (tagsContainer) {
-                tagsContainer.innerHTML = (globalProfileData.tags || []).map(tag => `<span class="px-3 py-1 bg-yellow-50 dark:bg-[#25252b] text-brand-dark dark:text-yellow-400 rounded-full text-sm font-bold border border-yellow-100/50 dark:border-gray-800 cursor-default">#${tag.trim()}</span>`).join('');
+                tagsContainer.innerHTML = (globalProfileData.tags || []).map(tag => `<span class="px-3 py-1 bg-yellow-50 dark:bg-[#25252b] text-brand-dark dark:text-yellow-400 rounded-full text-sm font-bold border border-yellow-100/50 dark:border-gray-800 cursor-default squishy">#${tag.trim()}</span>`).join('');
             }
             
             const ddayContainer = document.getElementById('dday-container');
@@ -971,6 +1068,19 @@
                     fancimmEl.style.display = 'none';
                 }
             }
+
+            // 🌟 [실시간 연동] SOOP 방송국 ID 기반 프로필 및 파비콘 실시간 업데이트 (이식)
+            const soopId = getSoopId(socials.soop);
+            const dynamicAvatarUrl = `https://stimg.afreecatv.com/LOGO/${soopId.substring(0, 2)}/${soopId}/${soopId}.jpg`;
+            
+            const avatarDisplay = document.getElementById('avatar-display');
+            if (avatarDisplay) {
+                avatarDisplay.src = dynamicAvatarUrl;
+            }
+            const faviconLink = document.getElementById('favicon-link');
+            if (faviconLink) {
+                faviconLink.href = dynamicAvatarUrl;
+            }
         }
 
         // 공지 목록 렌더링
@@ -990,7 +1100,7 @@
                 if (notice.link && notice.link.trim() !== '') {
                     linkHtml = `
                         <div class="mt-2.5">
-                            <a href="${notice.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm font-title text-white bg-sub hover:bg-sub-dark px-3 py-1.5 rounded-xl shadow-sm transition-all hover:scale-[1.02]">
+                            <a href="${notice.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm font-title text-white bg-sub hover:bg-sub-dark px-3 py-1.5 rounded-xl shadow-sm transition-all hover:scale-[1.02] squishy">
                                 링크 가기 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                             </a>
                         </div>
@@ -1060,7 +1170,7 @@
                 const avatarUrl = getAvatarUrl(user);
                 const safeName = user.nickname.length >= 2 ? user.nickname.substring(0,2) : user.nickname;
                 const card = document.createElement('div');
-                card.className = 'bg-white dark:bg-[#1e1e24] border border-yellow-100/50 dark:border-gray-800 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50/30 dark:hover:bg-gray-800 transition-all shadow-sm relative group hover:scale-[1.03] duration-200';
+                card.className = 'bg-white dark:bg-[#1e1e24] border border-yellow-100/50 dark:border-gray-800 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50/30 dark:hover:bg-gray-800 transition-all shadow-sm relative group squishy';
                 card.onclick = () => { if (isAdminMode) openUpboEditModal(user, avatarUrl); else openUpboModal(user, avatarUrl); };
                 const adminBadge = isAdminMode ? `<div class="absolute top-2 right-2 text-gray-400 group-hover:text-brand transition-colors"><i class="fa-solid fa-pen-to-square text-sm"></i></div>` : '';
 
@@ -1119,6 +1229,7 @@
                 document.getElementById('admin-add-user-btn').classList.add('hidden'); document.getElementById('admin-add-user-btn').classList.remove('flex');
                 document.getElementById('admin-notice-edit-btn').classList.add('hidden'); document.getElementById('admin-schedule-edit-btn').classList.add('hidden'); document.getElementById('admin-profile-edit-btn').classList.add('hidden');
                 document.getElementById('upbo-search').dispatchEvent(new Event('input')); 
+                showToast("관리자 모드가 완전히 해제되었습니다. 🍡");
                 return;
             }
             const modal = document.getElementById('admin-login-modal');
@@ -1138,6 +1249,7 @@
                 document.getElementById('admin-add-user-btn').classList.remove('hidden'); document.getElementById('admin-add-user-btn').classList.add('flex');
                 document.getElementById('admin-notice-edit-btn').classList.remove('hidden'); document.getElementById('admin-schedule-edit-btn').classList.remove('hidden'); document.getElementById('admin-profile-edit-btn').classList.remove('hidden');
                 document.getElementById('upbo-search').dispatchEvent(new Event('input'));
+                showToast("모치네 매니저 권한 인증에 성공했습니다! ⭐");
             } else {
                 const input = document.getElementById('admin-pin');
                 input.classList.add('border-red-500', 'animate-shake'); input.value = ''; input.placeholder = '틀린 패스워드입니다!';
@@ -1219,6 +1331,7 @@
                 closeUpboEditModal();
                 document.getElementById('upbo-search').dispatchEvent(new Event('input'));
                 deleteConfirmState = false;
+                showToast("해당 모찍이 유저 기록이 영구 삭제되었습니다.");
             }
         }
 
@@ -1249,6 +1362,7 @@
         function deleteItem(index) {
             const user = globalUpboData.find(u => u.id === currentEditingUserId); if (!user) return;
             user.items.splice(index, 1); saveUpboData(); renderEditItems(); document.getElementById('upbo-search').dispatchEvent(new Event('input'));
+            showToast("선택된 업보 내역이 목록에서 청소되었습니다.");
         }
 
         function addNewItem() {
@@ -1257,6 +1371,7 @@
             const existing = user.items.find(i => i.name === name);
             if (existing) existing.count += 1; else user.items.push({ name: name, count: 1 });
             input.value = ''; saveUpboData(); renderEditItems(); document.getElementById('upbo-search').dispatchEvent(new Event('input'));
+            showToast("업보 항목이 안전하게 가산되었습니다. ✨");
         }
 
         function openAddUserModal() {
@@ -1273,6 +1388,7 @@
             }
             globalUpboData.unshift({ id: idInput, nickname: nickInput, items: [] });
             saveUpboData(); closeAddUserModal(); document.getElementById('upbo-search').dispatchEvent(new Event('input'));
+            showToast(`새 모찍이 "${nickInput}"님이 리스트에 보충되었습니다!`);
         }
 
         // 공지 편집기 제어
@@ -1340,8 +1456,9 @@
             linkInput.value = '';
             renderNoticeEditList(); 
             renderNotice();
+            showToast("신규 긴급 속보가 보드에 게재되었습니다. 📢");
         }
-        function deleteNotice(index) { globalNoticeData.splice(index, 1); updateFirestore('notice', globalNoticeData); renderNoticeEditList(); renderNotice(); }
+        function deleteNotice(index) { globalNoticeData.splice(index, 1); updateFirestore('notice', globalNoticeData); renderNoticeEditList(); renderNotice(); showToast("공지사항 정리가 완료되었습니다."); }
 
         // 스케줄 편집기 제어
         function openScheduleEditModal() {
@@ -1370,6 +1487,7 @@
                 if (isRest) { schedule.color = 'green'; } else { if (schedule.day === '토') schedule.color = 'blue'; else if (schedule.day === '일') schedule.color = 'red'; else schedule.color = 'gray'; }
             });
             updateFirestore('schedule', globalScheduleData); renderSchedule(); closeScheduleEditModal();
+            showToast("금주의 주간 고정 스케줄이 배포되었습니다. 🗓️");
         }
 
         // 대표 정보 수정 열기
@@ -1497,6 +1615,7 @@
             updateFirestore('profile', globalProfileData); 
             renderProfile(); 
             closeProfileEditModal();
+            showToast("대표 소개 정보 및 실시간 연동 주소가 갱신되었습니다! 🍡");
         }
 
         // ==========================================
