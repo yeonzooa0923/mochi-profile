@@ -165,7 +165,7 @@
             <!-- Header Card -->
             <div class="bg-white dark:bg-[#1a1a20] rounded-3xl shadow-sm border border-yellow-100/40 dark:border-gray-800 overflow-hidden transition-colors duration-300">
                 <!-- Cover Image (배너 이미지 URL 가변 연동) -->
-                <div class="h-32 sm:h-48 w-full relative overflow-hidden bg-gradient-to-r from-sub-light via-yellow-50 to-brand-light dark:from-sky-950 dark:to-yellow-950">
+                <div class="h-32 sm:h-52 w-full relative overflow-hidden bg-gradient-to-r from-sub-light via-yellow-50 to-brand-light dark:from-sky-950 dark:to-yellow-950">
                     <img id="profile-banner-img" src="" 
                          onerror="this.src='https://placehold.co/1200x400/fef08a/0ea5e9?text=Mochi'" 
                          class="w-full h-full object-cover absolute inset-0" alt="모치 배너">
@@ -439,6 +439,7 @@
                     <div>
                         <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1.5">SOOP 아이디 (선택 - 프로필 프사 연동용)</label>
                         <input type="text" id="new-user-id" class="w-full bg-yellow-50/20 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 rounded-xl focus:ring-1 focus:ring-sub p-3 outline-none" placeholder="예: mong0519">
+                        <p class="text-xs text-amber-500 mt-1 font-sans font-medium">* 비어있는 경우 🐼 판다 프로필로 나타납니다.</p>
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1.5">닉네임 (필수)</label>
@@ -496,7 +497,7 @@
         </div>
 
         <!-- Profile Edit Modal -->
-        <div id="profile-edit-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="profile-edit-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 font-sans">
             <div class="bg-white dark:bg-[#1a1a20] rounded-2xl shadow-2xl w-11/12 max-w-lg overflow-hidden transform scale-95 transition-transform duration-300 border border-yellow-100/50 dark:border-gray-800 flex flex-col max-h-[90vh]">
                 <div class="p-4 flex items-center justify-between border-b border-yellow-50 dark:border-gray-800 bg-brand-light/30 dark:bg-yellow-950/20">
                     <h3 class="text-xl font-title text-gray-900 dark:text-white flex items-center gap-2"><i class="fa-solid fa-address-card text-brand"></i> 대표 프로필 관리</h3>
@@ -505,20 +506,42 @@
                     </button>
                 </div>
                 
-                <div class="p-5 flex-grow overflow-y-auto space-y-6 font-bold text-sm">
-                    <!-- Banner Image Editable Input -->
+                <div class="p-5 flex-grow overflow-y-auto space-y-6 text-sm">
+                    <!-- Banner Image Editable Input (With Direct File Upload) -->
                     <div>
-                        <h4 class="text-base font-title text-gray-900 dark:text-white mb-2"><i class="fa-regular fa-image text-brand mr-1"></i> 대표 배너 설정</h4>
-                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1.5">배너 이미지 URL (SOOP 이미지 또는 웹 이미지 링크)</label>
-                        <input type="text" id="edit-profile-banner" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium" placeholder="예: https://...">
+                        <h4 class="text-base font-title text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                            <i class="fa-regular fa-image text-brand"></i> 대표 배너 설정
+                        </h4>
+                        
+                        <!-- Drag-and-drop Image Area -->
+                        <div class="mb-3">
+                            <label class="block text-xs text-gray-600 dark:text-gray-400 mb-2 font-bold">배너 이미지 직접 파일 업로드 (고화질 최적화 드로잉 지원)</label>
+                            <div id="banner-dropzone" class="border-2 border-dashed border-yellow-300 dark:border-gray-700 bg-yellow-50/10 dark:bg-gray-950 rounded-2xl p-4 text-center cursor-pointer hover:bg-yellow-50/30 hover:border-yellow-400 transition-colors relative flex flex-col items-center justify-center min-h-[120px]">
+                                <input type="file" id="edit-profile-banner-file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                                <div id="banner-upload-prompt" class="space-y-1">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-yellow-400 dark:text-gray-500"></i>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 font-bold">여기로 이미지 파일을 끌어다 놓거나 클릭하세요.</p>
+                                    <p class="text-[11px] text-gray-400">JPG, PNG, WEBP (고해상도로 최적화 압축 변환됩니다)</p>
+                                </div>
+                                <div id="banner-upload-preview" class="hidden w-full flex-col items-center gap-2">
+                                    <img id="banner-preview-img" src="" class="h-20 w-auto rounded-lg object-cover border border-yellow-200">
+                                    <button type="button" onclick="clearUploadedBanner()" class="text-xs bg-red-50 text-red-600 px-2 py-1 rounded-lg hover:bg-red-100 transition-colors font-title">
+                                        <i class="fa-solid fa-trash mr-1"></i> 업로드 취소
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1.5 font-bold">또는 배너 이미지 웹주소(URL) 직접 입력</label>
+                        <input type="text" id="edit-profile-banner" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold" placeholder="예: https://...">
                     </div>
                     <hr class="border-yellow-50 dark:border-gray-800">
 
                     <div>
                         <h4 class="text-base font-title text-gray-900 dark:text-white mb-2"><i class="fa-solid fa-star text-brand"></i> 소개말</h4>
-                        <textarea id="edit-profile-intro" rows="3" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none resize-none mb-2 font-sans font-medium"></textarea>
-                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1.5 mt-3">대표 해시태그 (쉼표(,)로 분리)</label>
-                        <input type="text" id="edit-profile-tags" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium">
+                        <textarea id="edit-profile-intro" rows="3" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none resize-none mb-2 font-sans font-bold"></textarea>
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1.5 mt-3 font-bold">대표 해시태그 (쉼표(,)로 분리)</label>
+                        <input type="text" id="edit-profile-tags" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold">
                     </div>
                     <hr class="border-yellow-50 dark:border-gray-800">
                     
@@ -537,18 +560,18 @@
 
                     <div>
                         <h4 class="text-base font-title text-gray-900 dark:text-white mb-3"><i class="fa-regular fa-calendar-check text-brand"></i> 방송 스케줄 개요 정보</h4>
-                        <div class="space-y-3">
+                        <div class="space-y-3 font-bold">
                             <div class="flex items-center gap-3">
                                 <span class="text-xs text-gray-500 w-16 flex-shrink-0">방송 주기</span>
-                                <input type="text" id="edit-profile-time" class="flex-grow bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-2.5 outline-none font-sans font-medium">
+                                <input type="text" id="edit-profile-time" class="flex-grow bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-2.5 outline-none font-sans font-bold">
                             </div>
                             <div class="flex items-center gap-3">
                                 <span class="text-xs text-gray-500 w-16 flex-shrink-0">주요 소통</span>
-                                <input type="text" id="edit-profile-content" class="flex-grow bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-2.5 outline-none font-sans font-medium">
+                                <input type="text" id="edit-profile-content" class="flex-grow bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-2.5 outline-none font-sans font-bold">
                             </div>
                             <div class="flex items-center gap-3">
                                 <span class="text-xs text-gray-500 w-16 flex-shrink-0">선호 장르</span>
-                                <input type="text" id="edit-profile-game" class="flex-grow bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-2.5 outline-none font-sans font-medium">
+                                <input type="text" id="edit-profile-game" class="flex-grow bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-2.5 outline-none font-sans font-bold">
                             </div>
                         </div>
                     </div>
@@ -558,11 +581,11 @@
                         <div class="space-y-3 font-bold">
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1.5 font-bold">좋아하는 대상들</label>
-                                <input type="text" id="edit-profile-likes" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium">
+                                <input type="text" id="edit-profile-likes" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold">
                             </div>
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1.5 font-bold">피하고 싶은 대상들</label>
-                                <input type="text" id="edit-profile-dislikes" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium">
+                                <input type="text" id="edit-profile-dislikes" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold">
                             </div>
                         </div>
                     </div>
@@ -572,33 +595,33 @@
                         <div class="space-y-3 font-bold">
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1.5 font-bold">SOOP 방송국 주소</label>
-                                <input type="text" id="edit-profile-soop" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium" placeholder="SOOP 주소를 입력해주세요">
+                                <input type="text" id="edit-profile-soop" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold" placeholder="SOOP 주소를 입력해주세요">
                             </div>
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1.5 font-bold">YouTube 채널 주소</label>
-                                <input type="text" id="edit-profile-youtube" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium" placeholder="YouTube 주소를 입력해주세요">
+                                <input type="text" id="edit-profile-youtube" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold" placeholder="YouTube 주소를 입력해주세요">
                             </div>
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1.5 font-bold">팬심 주소</label>
-                                <input type="text" id="edit-profile-fancim" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium" placeholder="팬심 주소를 입력해주세요">
+                                <input type="text" id="edit-profile-fancim" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold" placeholder="팬심 주소를 입력해주세요">
                             </div>
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1.5 font-bold">팬심M 주소</label>
-                                <input type="text" id="edit-profile-fancimm" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-medium" placeholder="팬심M 주소를 입력해주세요">
+                                <input type="text" id="edit-profile-fancimm" class="w-full bg-yellow-50/10 dark:bg-gray-950 border border-yellow-100 dark:border-gray-800 text-gray-900 dark:text-gray-200 text-sm rounded-xl focus:ring-1 focus:ring-brand p-3 outline-none font-sans font-bold" placeholder="팬심M 주소를 입력해주세요">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="p-4 border-t border-yellow-50 dark:border-gray-800 bg-yellow-50/20 dark:bg-gray-900 flex justify-end gap-2 font-title">
                     <button onclick="closeProfileEditModal()" class="px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-sm hover:bg-gray-200 transition-colors">취소</button>
-                    <button onclick="saveProfileChanges()" class="bg-brand text-brand-dark px-6 py-2.5 rounded-xl text-sm hover:bg-yellow-500 transition-colors">저장 완료</button>
+                    <button id="save-profile-btn" onclick="saveProfileChanges()" class="bg-brand text-brand-dark px-6 py-2.5 rounded-xl text-sm hover:bg-yellow-500 transition-colors">저장 완료</button>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- Visual Toast Notification (이식) -->
+    <!-- Visual Toast Notification -->
     <div id="toast-message" class="fixed bottom-6 right-6 z-[150] bg-yellow-400 text-[#451A03] font-title text-base py-3 px-5 rounded-xl shadow-lg transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 border border-yellow-500">
         <span id="toast-text">변경 사항이 반영되었습니다! 🍡</span>
     </div>
@@ -639,7 +662,7 @@
         const defaultUpboData = [
             { id: 'mochifan_1', nickname: '말랑빵이', items: [{ name: '볼꼬집기 방셀', count: 1 }, { name: '롤 합방권', count: 1 }, { name: '애교 체키', count: 2 }] },
             { id: 'mochifan_2', nickname: '밀가루맛빵', items: [{ name: '정수리 방셀', count: 1 }, { name: '성대모사 룰렛', count: 1 }] },
-            { id: 'mochifan_3', nickname: '초코모찌', items: [{ name: '플로팅 하단 배너', count: 1 }] },
+            { id: '', nickname: '무명모찍이', items: [{ name: '플로팅 하단 배너', count: 1 }] }, // ID가 없으므로 이모지 대상
             { id: 'mochifan_4', nickname: '도토리수수', items: [{ name: '모찌송 리액션', count: 1 }] }
         ];
         
@@ -688,6 +711,9 @@
         let isAdminMode = false;
         let currentEditingUserId = null;
         let deleteConfirmState = false; 
+
+        // 직접 업로드된 베이스64 캐시 홀더
+        let uploadedBannerBase64 = null;
 
         // 로컬 스토리지 안전 유틸리티
         function safeGetStorage(key, defaultValue) {
@@ -840,6 +866,130 @@
             }
         }
 
+        // 고해상도 고화질 이미지 리사이징 가공 가속 헬퍼
+        function processHighResolutionImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        // 고화질 유지를 위해 가로 해상도 한도를 최대 1920px로 여유 있게 높임
+                        const maxDimension = 1920;
+                        if (width > maxDimension || height > maxDimension) {
+                            if (width > height) {
+                                height = Math.round((height * maxDimension) / width);
+                                width = maxDimension;
+                            } else {
+                                width = Math.round((width * maxDimension) / height);
+                                height = maxDimension;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // 이미지 스무딩 품질 최상으로 지정
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // 0.92의 극단적 고품질 압축 변환
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+                        resolve(dataUrl);
+                    };
+                    img.onerror = (err) => reject(err);
+                };
+                reader.onerror = (err) => reject(err);
+            });
+        }
+
+        // 배너 직접 업로드 파일 체인지 바인딩
+        function initBannerUploadEvents() {
+            const fileInput = document.getElementById('edit-profile-banner-file');
+            const dropzone = document.getElementById('banner-dropzone');
+            
+            if (!fileInput || !dropzone) return;
+
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    await handleBannerFile(file);
+                }
+            });
+
+            // 드래그 앤 드롭 효과 바인딩
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    dropzone.classList.add('border-sub', 'bg-sub-light/10');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    dropzone.classList.remove('border-sub', 'bg-sub-light/10');
+                }, false);
+            });
+
+            dropzone.addEventListener('drop', async (e) => {
+                const dt = e.dataTransfer;
+                const file = dt.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    await handleBannerFile(file);
+                }
+            });
+        }
+
+        async function handleBannerFile(file) {
+            const prompt = document.getElementById('banner-upload-prompt');
+            const preview = document.getElementById('banner-upload-preview');
+            const previewImg = document.getElementById('banner-preview-img');
+            const saveBtn = document.getElementById('save-profile-btn');
+            
+            if (!previewImg || !preview || !prompt || !saveBtn) return;
+
+            try {
+                saveBtn.disabled = true;
+                saveBtn.innerText = '이미지 처리 중...';
+                
+                // 최상급 리사이즈 후 64비트 변환
+                const optimizedBase64 = await processHighResolutionImage(file);
+                uploadedBannerBase64 = optimizedBase64;
+                
+                previewImg.src = optimizedBase64;
+                prompt.classList.add('hidden');
+                preview.classList.remove('hidden');
+                
+                // 텍스트 필드 자동 대치
+                document.getElementById('edit-profile-banner').value = '[직접 업로드 완료]';
+                
+                showToast("배너 이미지가 극대화된 화질로 압축 세팅되었습니다. ✨");
+            } catch (err) {
+                console.error("Image processing error: ", err);
+                showToast("이미지 품질 보정 중 오류가 일어났습니다.");
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerText = '저장 완료';
+            }
+        }
+
+        function clearUploadedBanner() {
+            uploadedBannerBase64 = null;
+            document.getElementById('edit-profile-banner-file').value = '';
+            document.getElementById('edit-profile-banner').value = '';
+            document.getElementById('banner-upload-prompt').classList.remove('hidden');
+            document.getElementById('banner-upload-preview').classList.add('hidden');
+        }
+
         // 초기 스타트 바인딩 및 이벤트 핸들러 등록
         document.addEventListener('DOMContentLoaded', async () => {
             // 파티클 백그라운드 활성화
@@ -896,7 +1046,7 @@
             if (searchInput) {
                 searchInput.addEventListener('input', (e) => {
                     const keyword = e.target.value.toLowerCase();
-                    const filtered = globalUpboData.filter(user => user.nickname.toLowerCase().includes(keyword) || user.id.toLowerCase().includes(keyword));
+                    const filtered = globalUpboData.filter(user => user.nickname.toLowerCase().includes(keyword) || (user.id || '').toLowerCase().includes(keyword));
                     renderUpbo(filtered);
                 });
             }
@@ -907,6 +1057,9 @@
             renderUpbo(globalUpboData);
             renderNotice();
             renderSchedule();
+
+            // 이미지 업로드 인터랙션 바인딩
+            initBannerUploadEvents();
         });
 
         // ==========================================
@@ -1146,17 +1299,16 @@
             });
         }
 
-        // 가상 아바타 URL 수집 (아프리카tv/SOOP 아이콘 연동)
+        // 가상 아바타 URL 수집 (아프리카tv/SOOP 아이콘 연동 및 🐼 판다 조건 체크)
         function getAvatarUrl(user) {
             if (user.id && user.id.trim() !== '') {
-                const prefix = user.id.substring(0, 2);
-                return `https://stimg.afreecatv.com/LOGO/${prefix}/${user.id}/${user.id}.jpg`;
+                const prefix = user.id.trim().substring(0, 2);
+                return `https://stimg.afreecatv.com/LOGO/${prefix}/${user.id.trim()}/${user.id.trim()}.jpg`;
             }
-            const safeName = user.nickname.length >= 2 ? user.nickname.substring(0,2) : user.nickname;
-            return `https://placehold.co/100x100/fef08a/0ea5e9?text=${encodeURIComponent(safeName)}`;
+            return ''; // 아이디가 비어있으면 이모지 처리를 위해 공백 반환
         }
 
-        // 업보 보드판 빌딩
+        // 업보 보드판 빌딩 (프로필 무사진 유저 🐼 판다 대체 완벽 대응)
         function renderUpbo(data) {
             const grid = document.getElementById('upbo-grid');
             if (!grid) return;
@@ -1171,12 +1323,23 @@
                 const safeName = user.nickname.length >= 2 ? user.nickname.substring(0,2) : user.nickname;
                 const card = document.createElement('div');
                 card.className = 'bg-white dark:bg-[#1e1e24] border border-yellow-100/50 dark:border-gray-800 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50/30 dark:hover:bg-gray-800 transition-all shadow-sm relative group squishy';
+                
                 card.onclick = () => { if (isAdminMode) openUpboEditModal(user, avatarUrl); else openUpboModal(user, avatarUrl); };
                 const adminBadge = isAdminMode ? `<div class="absolute top-2 right-2 text-gray-400 group-hover:text-brand transition-colors"><i class="fa-solid fa-pen-to-square text-sm"></i></div>` : '';
 
+                // 아바타 렌더러 분기 처리 (아이디가 빈 경우 🐼 판다)
+                let avatarHtml = '';
+                if (avatarUrl) {
+                    // ID가 있는 경우 아프리카 이미지 바인딩 (실패 시 onerror를 통해 🐼 판다 대체 처리)
+                    avatarHtml = `<img src="${avatarUrl}" onerror="this.onerror=null; this.outerHTML='<div class=\\'w-16 h-16 rounded-full bg-yellow-150/50 dark:bg-yellow-950/30 border-2 border-yellow-200 dark:border-gray-700 flex items-center justify-center text-3xl shadow-sm mb-2.5\\'>🐼</div>';" alt="${user.nickname}" class="w-16 h-16 rounded-full object-cover mb-2.5 shadow-sm border-2 border-yellow-200 dark:border-gray-700 bg-white dark:bg-gray-850">`;
+                } else {
+                    // ID가 없는 경우 바로 사랑스러운 🐼 판다 이모지 적용
+                    avatarHtml = `<div class="w-16 h-16 rounded-full bg-yellow-50 dark:bg-[#25252b] border-2 border-yellow-200 dark:border-gray-700 flex items-center justify-center text-3xl shadow-sm mb-2.5">🐼</div>`;
+                }
+
                 card.innerHTML = `
                     ${adminBadge}
-                    <img src="${avatarUrl}" onerror="this.src='https://placehold.co/100x100/fef08a/0ea5e9?text=${encodeURIComponent(safeName)}'" alt="${user.nickname}" class="w-16 h-16 rounded-full object-cover mb-2.5 shadow-sm border-2 border-yellow-200 dark:border-gray-700 bg-white dark:bg-gray-850">
+                    ${avatarHtml}
                     <div class="text-gray-900 dark:text-gray-100 font-title text-base mb-2.5 truncate w-full text-center">${user.nickname}</div>
                     <div class="bg-brand text-brand-dark dark:bg-yellow-950/40 dark:text-brand text-sm font-title px-2.5 py-0.5 rounded-full shadow-xs">업보 ${totalItems}</div>
                 `;
@@ -1198,11 +1361,19 @@
                 </div>
             `).join('') : `<div class="text-center text-gray-500 py-6 font-bold">보유한 업보가 깨끗해요! ✨</div>`;
 
+            // 아바타 렌더러 분기 처리 (아이디가 빈 경우 🐼 판다)
+            let headerAvatarHtml = '';
+            if (avatarUrl) {
+                headerAvatarHtml = `<img src="${avatarUrl}" onerror="this.onerror=null; this.outerHTML='<div class=\\'w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-100 dark:border-gray-700 flex items-center justify-center text-xl\\'>🐼</div>';" class="w-10 h-10 rounded-full border border-yellow-100 dark:border-gray-700 object-cover">`;
+            } else {
+                headerAvatarHtml = `<div class="w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-100 dark:border-gray-700 flex items-center justify-center text-xl">🐼</div>`;
+            }
+
             modal.innerHTML = `
                 <div class="bg-white dark:bg-[#1a1a20] rounded-2xl shadow-2xl w-11/12 max-w-sm overflow-hidden transform scale-95 transition-transform duration-300 border border-yellow-100/50 dark:border-gray-800">
                     <div class="p-4 flex items-center justify-between border-b border-yellow-50 dark:border-gray-800 bg-[#fefcf3] dark:bg-[#121215]">
                         <div class="flex items-center gap-2.5">
-                            <img src="${avatarUrl}" onerror="this.src='https://placehold.co/100x100/fef08a/0ea5e9?text=${user.nickname.substring(0,2)}'" class="w-10 h-10 rounded-full border border-yellow-100 dark:border-gray-700 object-cover">
+                            ${headerAvatarHtml}
                             <div>
                                 <div class="text-gray-900 dark:text-white font-title text-base">${user.nickname}</div>
                                 <div class="text-gray-400 text-xs font-bold">(${user.id || '아이디 미지정'})</div>
@@ -1264,15 +1435,23 @@
         function openUpboEditModal(user, avatarUrl) {
             currentEditingUserId = user.id; 
             const modal = document.getElementById('upbo-edit-modal');
+
+            // 에디터 헤더 🐼 판다 대체 렌더러 적용
+            let editHeaderAvatarHtml = '';
+            if (avatarUrl) {
+                editHeaderAvatarHtml = `<img src="${avatarUrl}" onerror="this.onerror=null; this.outerHTML='<div class=\\'w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-200 dark:border-gray-700 flex items-center justify-center text-xl\\'>🐼</div>';" class="w-10 h-10 rounded-full border border-yellow-200 object-cover bg-white">`;
+            } else {
+                editHeaderAvatarHtml = `<div class="w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-200 dark:border-gray-700 flex items-center justify-center text-xl">🐼</div>`;
+            }
             
             document.getElementById('edit-modal-header').innerHTML = `
-                <img src="${avatarUrl}" onerror="this.src='https://placehold.co/100x100/fef08a/0ea5e9?text=${user.nickname.substring(0,2)}'" class="w-10 h-10 rounded-full border border-yellow-200 object-cover bg-white">
+                ${editHeaderAvatarHtml}
                 <div>
                     <div class="text-gray-900 dark:text-white font-title text-base">
                         ${user.nickname} 
                         <span class="text-xs bg-brand text-brand-dark font-title px-1.5 py-0.5 rounded-md ml-1">수정</span>
                     </div>
-                    <div class="text-gray-400 text-xs font-bold">(${user.id})</div>
+                    <div class="text-gray-400 text-xs font-bold">(${user.id || '아이디 미지정'})</div>
                 </div>
             `;
             
@@ -1386,6 +1565,7 @@
                 const nickEl = document.getElementById('new-user-nickname'); nickEl.classList.add('border-red-500', 'placeholder-red-400'); nickEl.placeholder = '닉네임을 적어주세요!';
                 setTimeout(() => { nickEl.classList.remove('border-red-500', 'placeholder-red-400'); nickEl.placeholder = '예: 닉네임 입력'; }, 2000); return;
             }
+            // ID가 비어있어도 무관하게 업보 저금통 최상단에 리스트 삽입 (이모지 표시 대상)
             globalUpboData.unshift({ id: idInput, nickname: nickInput, items: [] });
             saveUpboData(); closeAddUserModal(); document.getElementById('upbo-search').dispatchEvent(new Event('input'));
             showToast(`새 모찍이 "${nickInput}"님이 리스트에 보충되었습니다!`);
@@ -1494,6 +1674,9 @@
         function openProfileEditModal() {
             const modal = document.getElementById('profile-edit-modal');
             
+            // 캐시 데이터 초기화
+            clearUploadedBanner();
+
             // 배너 이미지 및 기존 소셜 링크 연동 복원
             document.getElementById('edit-profile-banner').value = globalProfileData.bannerUrl || defaultProfileData.bannerUrl || '';
             document.getElementById('edit-profile-intro').value = globalProfileData.introText || ''; 
@@ -1574,8 +1757,13 @@
         function saveProfileChanges() {
             const parse = (str) => str.split(',').map(item => item.trim()).filter(item => item !== '');
             
-            // 배너 이미지 및 텍스트 저장
-            globalProfileData.bannerUrl = document.getElementById('edit-profile-banner').value.trim();
+            // 배너 저장 제어 (직접 업로드 이미지 존재 시 우선 세팅)
+            if (uploadedBannerBase64) {
+                globalProfileData.bannerUrl = uploadedBannerBase64;
+            } else {
+                globalProfileData.bannerUrl = document.getElementById('edit-profile-banner').value.trim();
+            }
+
             globalProfileData.introText = document.getElementById('edit-profile-intro').value; 
             globalProfileData.tags = parse(document.getElementById('edit-profile-tags').value);
             
@@ -1615,7 +1803,7 @@
             updateFirestore('profile', globalProfileData); 
             renderProfile(); 
             closeProfileEditModal();
-            showToast("대표 소개 정보 및 실시간 연동 주소가 갱신되었습니다! 🍡");
+            showToast("대표 소개 정보 및 직접 업로드한 배너가 갱신되었습니다! 🍡");
         }
 
         // ==========================================
@@ -1647,6 +1835,7 @@
         window.addEditDdayRow = addEditDdayRow;
         window.deleteEditDdayRow = deleteEditDdayRow;
         window.handleDeleteUser = handleDeleteUser;
+        window.clearUploadedBanner = clearUploadedBanner;
     </script>
 </body>
 </html>
