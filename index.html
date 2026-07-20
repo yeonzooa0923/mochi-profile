@@ -64,7 +64,7 @@
             animation: jelly 0.6s ease-in-out;
         }
 
-        /* 말랑말랑 바운스 효과 클래스 (이식) */
+        /* 말랑말랑 바운스 효과 클래스 */
         .squishy {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -84,7 +84,7 @@
             animation: float 4s ease-in-out infinite;
         }
 
-        /* 파티클 낙하 애니메이션 (이식) */
+        /* 파티클 낙하 애니메이션 */
         .leaf-particle {
             position: absolute;
             pointer-events: none;
@@ -99,7 +99,7 @@
 </head>
 <body class="bg-[#fffdf4] dark:bg-[#121215] text-gray-800 dark:text-gray-100 font-sans text-lg antialiased min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
 
-    <!-- Falling particles background (이식) -->
+    <!-- Falling particles background -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-75 dark:opacity-30" id="leaf-bg-effects"></div>
 
     <!-- Header / Navigation -->
@@ -168,12 +168,12 @@
                 <div class="h-32 sm:h-52 w-full relative overflow-hidden bg-gradient-to-r from-sub-light via-yellow-50 to-brand-light dark:from-sky-950 dark:to-yellow-950">
                     <img id="profile-banner-img" src="" 
                          onerror="this.src='https://placehold.co/1200x400/fef08a/0ea5e9?text=Mochi'" 
-                         class="w-full h-full object-cover absolute inset-0" alt="모치 배너">
+                         class="w-full h-full object-cover absolute inset-0 animate-fade-in" alt="모치 배너">
                     <div class="absolute inset-0 bg-black/5 dark:bg-black/20"></div>
                 </div>
                 
                 <div class="px-6 sm:px-8 pb-6 flex flex-col sm:flex-row relative">
-                    <!-- Avatar (ID 추가 연동) -->
+                    <!-- Avatar -->
                     <div class="-mt-16 sm:-mt-24 mb-4 sm:mb-0 sm:mr-6 flex-shrink-0 flex justify-center sm:block relative z-10">
                         <img id="avatar-display" class="h-32 w-32 sm:h-40 sm:w-40 rounded-full border-4 border-white dark:border-[#1a1a20] shadow-md object-cover bg-brand-light dark:bg-gray-800 jelly-hover" 
                              src="https://stimg.afreecatv.com/LOGO/mo/mong0519/mong0519.jpg" 
@@ -866,7 +866,7 @@
             }
         }
 
-        // 고해상도 고화질 이미지 리사이징 가공 가속 헬퍼
+        // 고해상도 고화질 이미지 리사이징 가공 가속 헬퍼 (배너 직접 업로드 시 Firestore 용량 최적화)
         function processHighResolutionImage(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -879,7 +879,7 @@
                         let width = img.width;
                         let height = img.height;
                         
-                        // 고화질 유지를 위해 가로 해상도 한도를 최대 1920px로 여유 있게 높임
+                        // 고화질 유지를 위해 가로 해상도 한도를 최대 1920px로 지정
                         const maxDimension = 1920;
                         if (width > maxDimension || height > maxDimension) {
                             if (width > height) {
@@ -901,7 +901,7 @@
                         
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        // 0.92의 극단적 고품질 압축 변환
+                        // 0.92의 품질 압축 변환으로 깨짐 방지 및 최상급 화질 확보
                         const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
                         resolve(dataUrl);
                     };
@@ -972,7 +972,7 @@
                 // 텍스트 필드 자동 대치
                 document.getElementById('edit-profile-banner').value = '[직접 업로드 완료]';
                 
-                showToast("배너 이미지가 극대화된 화질로 압축 세팅되었습니다. ✨");
+                showToast("배너 이미지가 최상의 화질로 컴팩트하게 세팅되었습니다. ✨");
             } catch (err) {
                 console.error("Image processing error: ", err);
                 showToast("이미지 품질 보정 중 오류가 일어났습니다.");
@@ -1222,7 +1222,7 @@
                 }
             }
 
-            // 🌟 [실시간 연동] SOOP 방송국 ID 기반 프로필 및 파비콘 실시간 업데이트 (이식)
+            // 🌟 [실시간 연동] SOOP 방송국 ID 기반 프로필 및 파비콘 실시간 업데이트
             const soopId = getSoopId(socials.soop);
             const dynamicAvatarUrl = `https://stimg.afreecatv.com/LOGO/${soopId.substring(0, 2)}/${soopId}/${soopId}.jpg`;
             
@@ -1331,7 +1331,7 @@
                 let avatarHtml = '';
                 if (avatarUrl) {
                     // ID가 있는 경우 아프리카 이미지 바인딩 (실패 시 onerror를 통해 🐼 판다 대체 처리)
-                    avatarHtml = `<img src="${avatarUrl}" onerror="this.onerror=null; this.outerHTML='<div class=\\'w-16 h-16 rounded-full bg-yellow-150/50 dark:bg-yellow-950/30 border-2 border-yellow-200 dark:border-gray-700 flex items-center justify-center text-3xl shadow-sm mb-2.5\\'>🐼</div>';" alt="${user.nickname}" class="w-16 h-16 rounded-full object-cover mb-2.5 shadow-sm border-2 border-yellow-200 dark:border-gray-700 bg-white dark:bg-gray-850">`;
+                    avatarHtml = `<img src="${avatarUrl}" onerror="this.onerror=null; this.outerHTML='<div class=\\'w-16 h-16 rounded-full bg-yellow-50 dark:bg-gray-800 border-2 border-yellow-200 dark:border-gray-700 flex items-center justify-center text-3xl shadow-sm mb-2.5\\'>🐼</div>';" alt="${user.nickname}" class="w-16 h-16 rounded-full object-cover mb-2.5 shadow-sm border-2 border-yellow-200 dark:border-gray-700 bg-white dark:bg-gray-850">`;
                 } else {
                     // ID가 없는 경우 바로 사랑스러운 🐼 판다 이모지 적용
                     avatarHtml = `<div class="w-16 h-16 rounded-full bg-yellow-50 dark:bg-[#25252b] border-2 border-yellow-200 dark:border-gray-700 flex items-center justify-center text-3xl shadow-sm mb-2.5">🐼</div>`;
@@ -1439,9 +1439,9 @@
             // 에디터 헤더 🐼 판다 대체 렌더러 적용
             let editHeaderAvatarHtml = '';
             if (avatarUrl) {
-                editHeaderAvatarHtml = `<img src="${avatarUrl}" onerror="this.onerror=null; this.outerHTML='<div class=\\'w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-200 dark:border-gray-700 flex items-center justify-center text-xl\\'>🐼</div>';" class="w-10 h-10 rounded-full border border-yellow-200 object-cover bg-white">`;
+                editHeaderAvatarHtml = `<img src="${avatarUrl}" onerror="this.onerror=null; this.outerHTML='<div class=\\'w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-250 dark:border-gray-700 flex items-center justify-center text-xl\\'>🐼</div>';" class="w-10 h-10 rounded-full border border-yellow-250 object-cover bg-white">`;
             } else {
-                editHeaderAvatarHtml = `<div class="w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-200 dark:border-gray-700 flex items-center justify-center text-xl">🐼</div>`;
+                editHeaderAvatarHtml = `<div class="w-10 h-10 rounded-full bg-yellow-50 dark:bg-gray-800 border border-yellow-250 dark:border-gray-700 flex items-center justify-center text-xl">🐼</div>`;
             }
             
             document.getElementById('edit-modal-header').innerHTML = `
